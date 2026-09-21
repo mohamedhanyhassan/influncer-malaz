@@ -240,6 +240,7 @@
 
   /* ---------- Campaign list ---------- */
   .campaign {
+    box-shadow: 0 10px 30px rgba(22,50,30,.045); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
     border: 1px solid var(--border-soft);
     border-radius: var(--radius);
     margin-bottom: 10px;
@@ -255,6 +256,18 @@
     user-select: none;
   }
   .campaign-head:hover { background: var(--surface-2); }
+  .campaign:hover { border-color:#C7DDD0; box-shadow:0 14px 34px rgba(22,50,30,.08); }
+  .campaign.open { border-color:#B9DCC3; }
+  .campaign-brand-logo { width:44px;height:44px;border-radius:12px;object-fit:cover;border:1px solid var(--border);background:#F3FAF5;flex:none; }
+  .campaign-brand-fallback { width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#43C466,#97EDAA);color:#12351C;font-weight:800;font-size:16px;flex:none; }
+  .campaign-info { flex:1;min-width:0; }
+  .campaign-kicker { font-size:10px;color:var(--green);font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px; }
+  .campaign-desc { font-size:12px;color:var(--text-faint);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .hero-grid { display:grid;grid-template-columns:1fr 300px;gap:34px;align-items:end; }
+  .hero-proof { border:1px solid var(--border);background:rgba(255,255,255,.82);border-radius:16px;padding:18px;box-shadow:0 12px 35px rgba(67,196,102,.08); }
+  .hero-proof .big { font-size:30px;font-weight:800;color:var(--green);font-family:var(--font-en-head); }
+  .hero-proof .small { color:var(--text-dim);font-size:12.5px;line-height:1.6; }
+  @media(max-width:760px){.hero-grid{grid-template-columns:1fr}.hero-proof{display:none}.campaign-desc{display:none}}
   .chev {
     flex: none;
     width: 16px; height: 16px;
@@ -420,11 +433,12 @@
       </div>
     </div>
 
-    <div class="eyebrow"><span class="line"></span><span id="eyebrowText">DASHBOARD — 2026</span></div>
-    <h1 class="hero-title" id="heroTitle"></h1>
-    <p class="hero-sub" id="heroSub"></p>
-
-    <div class="stat-row" id="statRow"></div>
+    <div class="hero-grid"><div>
+      <div class="eyebrow"><span class="line"></span><span id="eyebrowText">DASHBOARD — 2026</span></div>
+      <h1 class="hero-title" id="heroTitle"></h1>
+      <p class="hero-sub" id="heroSub"></p>
+      <div class="stat-row" id="statRow"></div>
+    </div><div class="hero-proof"><div class="big">5000+</div><div class="small">من المشاهير والمؤثرين داخل المملكة، مع اختيار الأسماء بما يتناسب مع طبيعة كل حملة وجمهورها.</div></div></div>
   </div>
 </div>
 
@@ -492,7 +506,7 @@ const STRINGS = {
     brand: "Coverage Of Campaigns",
     eyebrow: "DASHBOARD — 2026",
     heroTitleHTML: 'Every campaign,<br><span class="accent">fully covered.</span>',
-    heroSub: "في ملاذ، حملات المشاهير تبدأ بالاختيار الصحيح وتنتهي بتغطية ونتائج واضحة — كل التفاصيل موثقة في مكان واحد.",
+    heroSub: "في ملاذ، ما ينزل أي مشهور في حملتك بشكل عشوائي. نختار الأسماء المناسبة، نعتمدها معك، ونتابع كل تغطية ونتيجة من البداية للنهاية.",
     statCampaigns: "Campaigns", statInfluencers: "Influencers", statViews: "Total views",
     searchPlaceholder: "Search campaigns or usernames…",
     noticeNormal: "A complete compilation of all campaign coverages, analytics, and outcomes — presented in one place. Click a campaign to open its influencer breakdown.",
@@ -508,7 +522,7 @@ const STRINGS = {
     sample: "Sample data",
     openLink: "Open coverage link",
     noMatch: (q) => `No campaigns or usernames match "${q}".`,
-    closingText: "Malaz — celebrity campaigns, selected with purpose and tracked with clarity.",
+    closingText: "ملاذ — اختيار أدق للمشاهير، وتغطية أوضح لكل حملة.",
     pw: { title:"Admin access", sub:"Enter the password to add or edit campaign data.", placeholder:"Password", error:"Wrong password.", cancel:"Cancel", submit:"Unlock" },
     camp: {
       newTitle:"New campaign", newSub:"Give the campaign a name — you can add influencer rows once it exists.",
@@ -752,6 +766,8 @@ function campaignModal(existing){
     <h3>${isEdit ? s.editTitle : s.newTitle}</h3>
     <p class="sub">${isEdit ? s.editSub : s.newSub}</p>
     <div class="field"><label>${s.label}</label><input type="text" id="cName" value="${isEdit ? existing.name.replace(/"/g,'&quot;') : ''}" placeholder="${s.placeholder}" /></div>
+    <div class="field"><label>Brand logo URL</label><input type="url" id="cLogo" value="${isEdit && existing.logo ? existing.logo : ''}" placeholder="https://…/logo.png" /></div>
+    <div class="field"><label>Campaign note</label><input type="text" id="cDesc" value="${isEdit && existing.description ? existing.description.replace(/"/g,'&quot;') : ''}" placeholder="مثال: تغطية افتتاح الفرع الجديد" /></div>
     <div class="modal-actions">
       <button class="btn" id="cCancel" type="button">${s.cancel}</button>
       <button class="btn primary" id="cSave" type="button">${isEdit ? s.save : s.create}</button>
@@ -762,8 +778,10 @@ function campaignModal(existing){
   document.getElementById('cSave').addEventListener('click', () => {
     const name = document.getElementById('cName').value.trim();
     if (!name) return;
-    if (isEdit){ existing.name = name; }
-    else { CAMPAIGNS.push({ id: slug(name), name, sample:false, influencers:[] }); }
+    const logo = document.getElementById('cLogo').value.trim() || null;
+    const description = document.getElementById('cDesc').value.trim() || '';
+    if (isEdit){ existing.name = name; existing.logo = logo; existing.description = description; }
+    else { CAMPAIGNS.push({ id: slug(name), name, logo, description, sample:false, influencers:[] }); }
     saveData(); closeModal(); renderAll();
   });
 }
@@ -895,7 +913,10 @@ function renderList(filter=""){
     el.innerHTML = `
       <div class="campaign-head" data-toggle="${campaign.id}">
         <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 6 15 12 9 18"/></svg>
-        <div class="campaign-title">${campaign.name}</div>
+        <div class="campaign-brand">
+          ${campaign.logo ? `<img class="campaign-brand-logo" src="${campaign.logo}" alt="${campaign.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="campaign-brand-fallback" style="display:none">${(campaign.name||'M').charAt(0).toUpperCase()}</div>` : `<div class="campaign-brand-fallback">${(campaign.name||'M').charAt(0).toUpperCase()}</div>`}
+        </div>
+        <div class="campaign-info"><div class="campaign-kicker">BRAND CAMPAIGN</div><div class="campaign-title">${campaign.name}</div>${campaign.description ? `<div class="campaign-desc">${campaign.description}</div>` : ''}</div>
         ${campaign.sample ? `<span class="badge sample">${s.sample}</span>` : ''}
         <div class="head-meta">
           <span class="badge">${influencers.length} ${s.influencerWord(influencers.length)}</span>
