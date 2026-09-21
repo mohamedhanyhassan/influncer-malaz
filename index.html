@@ -416,7 +416,34 @@
   .btn.primary { background: var(--amber); border-color: var(--amber); color: #FFFFFF; }
   .btn.primary:hover { filter: brightness(1.05); }
   .modal .error { color: var(--danger); font-size: 12.5px; margin-top: -6px; margin-bottom: 10px; display: none; }
-.malaz-link{color:#43C466;text-decoration:none;font-weight:800;transition:color .2s ease}.malaz-link:hover{color:#FF5028;text-decoration:underline}</style>
+.malaz-link{color:#43C466;text-decoration:none;font-weight:800;transition:color .2s ease}.malaz-link:hover{color:#FF5028;text-decoration:underline}
+/* Version 1.1 — Malaz Arabic-first visual system */
+html[dir="rtl"] body{font-family:var(--font-ar);text-align:right}
+body{background:#F3F7F4}
+.topbar{background:rgba(255,255,255,.94);border-bottom:1px solid #DDE9E0;box-shadow:0 2px 18px rgba(22,50,30,.045)}
+.hero{background:linear-gradient(180deg,#FFFFFF 0%,#F4FBF6 72%,#EAF7EE 100%);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:rgba(151,237,170,.20);left:-160px;top:-220px;filter:blur(4px);pointer-events:none}
+.wrap{background:transparent}
+.stat{background:#FFFFFF;border-color:#DCE9DF;box-shadow:0 7px 22px rgba(22,50,30,.045)}
+.notice{background:#FFF9F5;border-color:#F3D8CC}
+.toolbar{background:#FFFFFF;border:1px solid #DDE9E0;border-radius:14px;padding:12px;box-shadow:0 7px 22px rgba(22,50,30,.04)}
+.campaign{background:#FFFFFF;border-color:#DDE9E0}
+.campaign-head{background:#FFFFFF}
+.campaign-body{background:#F8FBF9}
+.table-wrap{background:#FFFFFF;border-color:#DDE9E0}
+th{background:#F0F8F2;color:#285536}
+td{border-color:#E5EEE7}
+.modal-card{background:#FFFFFF;border-color:#D7E5DB;box-shadow:0 25px 70px rgba(16,36,22,.20)}
+input,select,textarea{background:#FAFCFB;border-color:#D4E2D8;color:#16321E}
+input:focus,select:focus,textarea:focus{border-color:#43C466;box-shadow:0 0 0 3px rgba(67,196,102,.12)}
+.btn{border-radius:9px}
+.admin-btn{background:#16321E;color:#FFFFFF}
+.admin-btn:hover{background:#285536}
+.lang-btn{background:#EAF7EE;color:#24532F;border-color:#CFE5D5}
+footer{background:#16321E;color:#D9EBDD}
+footer .muted{color:#A9C4AF}
+@media(max-width:700px){.topbar{padding-left:14px;padding-right:14px}.toolbar{padding:9px}}
+</style>
 </head>
 <body>
 
@@ -661,7 +688,7 @@ function saveLocalData(){
 
 let CAMPAIGNS = loadLocalData();
 let isAdmin = sessionStorage.getItem(ADMIN_KEY) === "1";
-let lang = localStorage.getItem(LANG_KEY) || "en";
+let lang = localStorage.getItem(LANG_KEY) || "ar";
 let openIds = new Set();
 
 function saveData(){
