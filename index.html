@@ -424,7 +424,7 @@ body{background:#F3F7F4}
 .hero{background:linear-gradient(180deg,#FFFFFF 0%,#F4FBF6 72%,#EAF7EE 100%);position:relative;overflow:hidden}
 .hero:after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;background:rgba(151,237,170,.20);left:-160px;top:-220px;filter:blur(4px);pointer-events:none}
 .wrap{background:transparent}
-.stat{background:#FFFFFF;border-color:#DCE9DF;box-shadow:0 7px 22px rgba(22,50,30,.045)}
+.stat{background:rgba(255,255,255,.10)!important;border:1px solid rgba(22,50,30,.10)!important;border-radius:12px;box-shadow:none!important}
 .notice{background:#FFF9F5;border-color:#F3D8CC}
 .toolbar{background:#FFFFFF;border:1px solid #DDE9E0;border-radius:14px;padding:12px;box-shadow:0 7px 22px rgba(22,50,30,.04)}
 .campaign{background:#FFFFFF;border-color:#DDE9E0}
@@ -443,9 +443,9 @@ input:focus,select:focus,textarea:focus{border-color:#43C466;box-shadow:0 0 0 3p
 footer{background:#16321E;color:#D9EBDD}
 footer .muted{color:#A9C4AF}
 @media(max-width:700px){.topbar{padding-left:14px;padding-right:14px}.toolbar{padding:9px}}
-.stat-row{background:linear-gradient(135deg,rgba(255,255,255,.68),rgba(22,50,30,.06))!important;border:1px solid rgba(216,232,220,.9)!important;border-radius:16px;padding:10px;box-shadow:0 10px 28px rgba(22,50,30,.06);backdrop-filter:blur(8px)}
-.stat{background:rgba(255,255,255,.5)!important;border:0!important;box-shadow:none!important}
-.stat-row:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(151,237,170,.12),rgba(255,255,255,0),rgba(22,50,30,.035));pointer-events:none}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;background:transparent!important;border:0!important;border-radius:0;padding:0;box-shadow:none!important;backdrop-filter:none;position:relative;overflow:visible}
+.stat{background:rgba(255,255,255,.10)!important;border:1px solid rgba(22,50,30,.10)!important;border-radius:12px;box-shadow:none!important}
+
 .malaz-link{color:#43C466;text-decoration:none;font-weight:800}.malaz-link:hover{color:#FF5028;text-decoration:underline}
 </style>
 </head>
@@ -535,7 +535,7 @@ const ADMIN_PASSWORD = "malaz2026";
 const STRINGS = {
   en: {
     brand: "Coverage Of Campaigns",
-    eyebrow: "DASHBOARD — 2026",
+    eyebrow: "سجل حملات وكالة ملاذ",
     heroTitleHTML: 'Every campaign,<br><span class="accent">fully covered.</span>',
     heroSub: "في ملاذ، ما ينزل أي مشهور في حملتك بشكل عشوائي. نختار الأسماء المناسبة، نعتمدها معك، ونتابع كل تغطية ونتيجة من البداية للنهاية.",
     statCampaigns: "Campaigns", statInfluencers: "Influencers", statViews: "Total views",
