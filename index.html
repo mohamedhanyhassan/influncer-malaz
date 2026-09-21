@@ -443,6 +443,10 @@ input:focus,select:focus,textarea:focus{border-color:#43C466;box-shadow:0 0 0 3p
 footer{background:#16321E;color:#D9EBDD}
 footer .muted{color:#A9C4AF}
 @media(max-width:700px){.topbar{padding-left:14px;padding-right:14px}.toolbar{padding:9px}}
+.stat-row{background:linear-gradient(135deg,rgba(255,255,255,.68),rgba(22,50,30,.06))!important;border:1px solid rgba(216,232,220,.9)!important;border-radius:16px;padding:10px;box-shadow:0 10px 28px rgba(22,50,30,.06);backdrop-filter:blur(8px)}
+.stat{background:rgba(255,255,255,.5)!important;border:0!important;box-shadow:none!important}
+.stat-row:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(151,237,170,.12),rgba(255,255,255,0),rgba(22,50,30,.035));pointer-events:none}
+.malaz-link{color:#43C466;text-decoration:none;font-weight:800}.malaz-link:hover{color:#FF5028;text-decoration:underline}
 </style>
 </head>
 <body>
@@ -461,7 +465,7 @@ footer .muted{color:#A9C4AF}
     </div>
 
     <div class="hero-grid"><div>
-      <div class="eyebrow"><span class="line"></span><span id="eyebrowText">DASHBOARD — 2026</span></div>
+      <div class="eyebrow"><span class="line"></span><span id="eyebrowText">سجل حملات وكالة <a href="https://malaz-sa.com" target="_blank" rel="noopener noreferrer" class="malaz-link">ملاذ</a></span></div>
       <h1 class="hero-title" id="heroTitle"></h1>
       <p class="hero-sub" id="heroSub"></p>
       <div class="stat-row" id="statRow"></div>
