@@ -440,7 +440,32 @@
 
 <div id="modalRoot"></div>
 
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore-compat.js"></script>
+
 <script>
+// ---------------------------------------------------------------
+// FIREBASE — shared real-time campaign data
+// ---------------------------------------------------------------
+const firebaseConfig = {
+  apiKey: "AIzaSyDdcMqaOzfU5Xc9nARgfaxW0yJ1eJVa5f8",
+  authDomain: "influncer-malaz.firebaseapp.com",
+  projectId: "influncer-malaz",
+  storageBucket: "influncer-malaz.firebasestorage.app",
+  messagingSenderId: "667363574009",
+  appId: "1:667363574009:web:5436382bee7604c869e228",
+  measurementId: "G-8VHVSM36L7"
+};
+
+firebase.initializeApp(firebaseConfig);
+const firebaseAuth = firebase.auth();
+const firestore = firebase.firestore();
+const CLOUD_DOC = firestore.collection("appData").doc("campaigns");
+let cloudReady = false;
+let cloudSyncStarted = false;
+let cloudUnsubscribe = null;
+
 // ---------------------------------------------------------------
 // ADMIN PASSWORD — soft client-side gate only, visible in page
 // source. Change it here before publishing anywhere sensitive.
@@ -599,16 +624,58 @@ const STORAGE_KEY = "coverage_campaigns_data_v1";
 const ADMIN_KEY = "coverage_campaigns_admin";
 const LANG_KEY = "coverage_campaigns_lang";
 
-function loadData(){
+function loadLocalData(){
   try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) return JSON.parse(raw); } catch(e){}
   return JSON.parse(JSON.stringify(DEFAULT_CAMPAIGNS));
 }
-function saveData(){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(CAMPAIGNS)); } catch(e){} }
 
-let CAMPAIGNS = loadData();
+function saveLocalData(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(CAMPAIGNS)); } catch(e){}
+}
+
+let CAMPAIGNS = loadLocalData();
 let isAdmin = sessionStorage.getItem(ADMIN_KEY) === "1";
 let lang = localStorage.getItem(LANG_KEY) || "en";
 let openIds = new Set();
+
+function saveData(){
+  saveLocalData();
+  if (!cloudReady) return;
+  return CLOUD_DOC.set({
+    campaigns: CAMPAIGNS,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).catch(err => {
+    console.error("Cloud save failed:", err);
+  });
+}
+
+function startCloudSync(){
+  if (cloudSyncStarted) return;
+  cloudSyncStarted = true;
+
+  firebaseAuth.signInAnonymously()
+    .then(() => {
+      cloudReady = true;
+      cloudUnsubscribe = CLOUD_DOC.onSnapshot(snapshot => {
+        if (snapshot.exists && Array.isArray(snapshot.data().campaigns)) {
+          CAMPAIGNS = snapshot.data().campaigns;
+          saveLocalData();
+          renderAll();
+        } else {
+          // First browser seeds the cloud with its existing local data.
+          return CLOUD_DOC.set({
+            campaigns: CAMPAIGNS,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      }, err => {
+        console.error("Realtime sync failed:", err);
+      });
+    })
+    .catch(err => {
+      console.error("Firebase anonymous auth failed:", err);
+    });
+}
 
 function t(){ return STRINGS[lang]; }
 
@@ -942,6 +1009,7 @@ langToggle.addEventListener('click', () => {
 });
 
 renderAll();
+startCloudSync();
 </script>
 </body>
 </html>
