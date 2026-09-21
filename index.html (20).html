@@ -9,19 +9,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #97EDAA;
-    --surface: #F4FFF6;
-    --surface-2: #E8F9EC;
-    --row-alt: #EEFBEF;
-    --border: #7BCB8B;
-    --border-soft: #A5DDB0;
-    --text: #12351C;
-    --text-dim: #42644B;
-    --text-faint: #5D8066;
+    --bg: #FFFFFF;
+    --surface: #FFFFFF;
+    --surface-2: #F4FBF6;
+    --row-alt: #F8FCF9;
+    --border: #D9E8DD;
+    --border-soft: #E5EEE7;
+    --text: #16321E;
+    --text-dim: #54705B;
+    --text-faint: #78917E;
     --amber: #FF5028;
     --amber-dim: #D94120;
     --green: #43C466;
-    --green-deep: #2D7A43;
+    --green-deep: #43C466;
     --green-soft: rgba(67,196,102,0.14);
     --danger: #FF6363;
     --radius: 10px;
@@ -52,6 +52,7 @@
 
   /* ---------- Hero ---------- */
   .hero {
+    background: linear-gradient(180deg, #FFFFFF 0%, #F7FFF9 100%);
     position: relative;
     overflow: hidden;
     border-bottom: 1px solid var(--border-soft);
@@ -178,6 +179,7 @@
 
   /* ---------- Main ---------- */
   .wrap {
+    position: relative;
     max-width: 1100px;
     margin: 0 auto;
     padding: 34px 24px 20px;
@@ -189,6 +191,16 @@
     justify-content: flex-end;
     margin-bottom: 16px;
   }
+
+  .malaz-story {
+    display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin:0 0 22px;padding:24px;border:1px solid var(--border);border-radius:14px;background:linear-gradient(135deg,#F7FFF9,#FFFFFF);box-shadow:0 8px 30px rgba(67,196,102,.08);
+  }
+  .malaz-story h2{margin:0 0 8px;font-family:var(--font-en-head);font-size:22px;color:var(--text)}
+  .malaz-story p{margin:0;color:var(--text-dim);line-height:1.75;font-size:14px}
+  .malaz-points{display:grid;gap:10px}
+  .malaz-point{padding:13px 14px;border-radius:10px;background:#fff;border:1px solid var(--border);font-size:13px;color:var(--text);font-weight:600}
+  .malaz-point span{display:block;color:var(--green);font-size:11px;margin-bottom:4px}
+  @media(max-width:700px){.malaz-story{grid-template-columns:1fr}}
 
   .notice {
     display: flex;
@@ -352,8 +364,8 @@
   /* ---------- Closing band ---------- */
   .closing {
     margin-top: 40px;
-    background: var(--green-deep);
-    color: #F4FFF6;
+    background: linear-gradient(135deg, #43C466, #97EDAA);
+    color: #12351C;
     padding: 26px 24px;
     display: flex;
     align-items: center;
@@ -364,7 +376,7 @@
   .closing-inner { max-width: 1100px; margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .closing .brand { color: #EAF1E7; }
   .closing .diamond { border-color: #EAF1E7; }
-  .closing p { margin: 0; font-size: 13.5px; color: #DDF3E2; }
+  .closing p { margin: 0; font-size: 13.5px; color: #24532F; }
 
   /* ---------- Modal ---------- */
   .modal-overlay {
@@ -417,7 +429,7 @@
 </div>
 
 <div class="wrap">
-  <div class="toolbar"><div id="noticeSlot" style="flex:1"></div></div>
+  <section class="malaz-story"><div><div class="eyebrow" style="margin-bottom:10px"><span class="line"></span><span>WHY MALAZ</span></div><h2>اختيار المشاهير عند ملاذ مو عشوائي.</h2><p>في ملاذ، نشتغل على حملات المشاهير كجزء من استراتيجية متكاملة. ما ينزل أي مشهور في الحملة إلا بعد اختياره واعتماده بما يتناسب مع النشاط، الجمهور، المنصة وطبيعة الحملة، مع متابعة التغطيات والنتائج في مكان واحد.</p></div><div class="malaz-points"><div class="malaz-point"><span>01 — SELECTION</span>اختيار المشاهير المناسبين للحملة</div><div class="malaz-point"><span>02 — CONTROL</span>ما يتم اعتماد أي اسم قبل اختياره</div><div class="malaz-point"><span>03 — TRACKING</span>متابعة التغطيات والروابط والمشاهدات</div></div></section><div class="toolbar"><div id="noticeSlot" style="flex:1"></div></div>
 
   <div class="search">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -480,7 +492,7 @@ const STRINGS = {
     brand: "Coverage Of Campaigns",
     eyebrow: "DASHBOARD — 2026",
     heroTitleHTML: 'Every campaign,<br><span class="accent">fully covered.</span>',
-    heroSub: "A running record of every influencer campaign — platform, location, coverage links and results, in one place.",
+    heroSub: "في ملاذ، حملات المشاهير تبدأ بالاختيار الصحيح وتنتهي بتغطية ونتائج واضحة — كل التفاصيل موثقة في مكان واحد.",
     statCampaigns: "Campaigns", statInfluencers: "Influencers", statViews: "Total views",
     searchPlaceholder: "Search campaigns or usernames…",
     noticeNormal: "A complete compilation of all campaign coverages, analytics, and outcomes — presented in one place. Click a campaign to open its influencer breakdown.",
@@ -496,7 +508,7 @@ const STRINGS = {
     sample: "Sample data",
     openLink: "Open coverage link",
     noMatch: (q) => `No campaigns or usernames match "${q}".`,
-    closingText: "Every coverage, tracked in one place.",
+    closingText: "Malaz — celebrity campaigns, selected with purpose and tracked with clarity.",
     pw: { title:"Admin access", sub:"Enter the password to add or edit campaign data.", placeholder:"Password", error:"Wrong password.", cancel:"Cancel", submit:"Unlock" },
     camp: {
       newTitle:"New campaign", newSub:"Give the campaign a name — you can add influencer rows once it exists.",
