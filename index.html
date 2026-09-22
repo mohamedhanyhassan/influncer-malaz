@@ -675,9 +675,38 @@ const DEFAULT_CAMPAIGNS = [
     { user:"creative_lujain", type:"Visit", location:"Riyadh", platforms:["instagram"], coverage:["Post","Reel"], link:"#", views:17450, likes:610, comments:42 },
     { user:"art.by.sara", type:"Visit", location:"Jeddah", platforms:["tiktok"], coverage:["Reel"], link:"#", views:24900, likes:1050, comments:76 }
   ]}
-];
-
-const STORAGE_KEY = "coverage_campaigns_data_v1";
+  { id:"roma-group", name:"Roma Group Campaign", sample:false, influencers:[
+    { user:"z2au2023", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:102485, likes:577, comments:48 },
+    { user:"_Ishmry18", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:381776, likes:2198, comments:89 },
+    { user:"sh_94at", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:87183, likes:161, comments:13 },
+    { user:"jeddah_n21", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:50836, likes:209, comments:81 },
+    { user:"zeen_50x", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:39875, likes:683, comments:59 },
+    { user:"mznah94", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:23312, likes:260, comments:10 },
+    { user:"rokaia_alaraby", type:"Delivery", location:"", platforms:["instagram"], coverage:["Stories"], link:null, views:88239, likes:null, comments:null },
+    { user:"soomatork_sa", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:193528, likes:349, comments:108 },
+    { user:"everything_779", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:43515, likes:518, comments:20 },
+    { user:"sofi_vlog011", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:11869, likes:264, comments:7 },
+    { user:"m7md_musaweez", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:36793, likes:441, comments:20 },
+    { user:"sal_64", type:"Delivery", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:9456, likes:77, comments:4 }
+  ]},
+  { id:"smokey-house", name:"Smokey House Campaign", sample:false, influencers:[
+    { user:"ahmadhmadeh03", type:"Visit", location:"", platforms:["instagram"], coverage:["Reel"], link:null, views:12100, likes:429, comments:16 },
+    { user:"riyadh.guides", type:"Visit", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:13446, likes:1933, comments:292 },
+    { user:"mla138", type:"Visit", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:12816, likes:600, comments:139 },
+    { user:"noly_a_", type:"Visit", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:95017, likes:1441, comments:73 },
+    { user:"nnyf_1", type:"Visit", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:52139, likes:124, comments:39 },
+    { user:"heoks2", type:"Visit", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:22092, likes:221, comments:34 }
+  ]},
+  { id:"imagination-new", name:"Imagination Campaign", sample:false, influencers:[
+    { user:"mody14_gamer", type:"Delivery", location:"", platforms:["instagram"], coverage:["Reel"], link:null, views:1265, likes:22, comments:1 }
+  ]},
+  { id:"wolf-cake", name:"Wolf Cake Campaign", sample:false, influencers:[
+    { user:"m_1riyadh", type:"Visit", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:184650, likes:2618, comments:89 },
+    { user:"hul.l7", type:"Visit", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:241750, likes:7689, comments:64 },
+    { user:"vzo2ll", type:"Visit", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:110450, likes:3040, comments:63 },
+    { user:"d7.21x", type:"Visit", location:"", platforms:["tiktok"], coverage:["Reel"], link:null, views:241150, likes:4217, comments:49 }
+  ]},
+];\n\nconst STORAGE_KEY = "coverage_campaigns_data_v1";
 const ADMIN_KEY = "coverage_campaigns_admin";
 const LANG_KEY = "coverage_campaigns_lang";
 
@@ -693,6 +722,8 @@ function saveLocalData(){
 let CAMPAIGNS = loadLocalData();
 let isAdmin = sessionStorage.getItem(ADMIN_KEY) === "1";
 let lang = localStorage.getItem(LANG_KEY) || "ar";
+const IMPORT_CAMPAIGN_IDS = ["roma-group","smokey-house","imagination-new","wolf-cake"];
+
 let openIds = new Set();
 
 function saveData(){
@@ -716,6 +747,12 @@ function startCloudSync(){
       cloudUnsubscribe = CLOUD_DOC.onSnapshot(snapshot => {
         if (snapshot.exists && Array.isArray(snapshot.data().campaigns)) {
           CAMPAIGNS = snapshot.data().campaigns;
+          const missing = IMPORT_CAMPAIGN_IDS.map(id => DEFAULT_CAMPAIGNS.find(c => c.id === id)).filter(Boolean).filter(def => !CAMPAIGNS.some(c => c.id === def.id));
+          if (missing.length) {
+            CAMPAIGNS = CAMPAIGNS.concat(JSON.parse(JSON.stringify(missing)));
+            saveLocalData();
+            return CLOUD_DOC.set({ campaigns: CAMPAIGNS, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+          }
           saveLocalData();
           renderAll();
         } else {
