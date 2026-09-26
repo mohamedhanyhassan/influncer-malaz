@@ -644,8 +644,25 @@ const STORAGE_KEY = "coverage_campaigns_data_v1";
 const ADMIN_KEY = "coverage_campaigns_admin";
 const LANG_KEY = "coverage_campaigns_lang";
 
+const DEMO_CAMPAIGN_IDS = new Set([
+  "kunoz",
+  "escape-game",
+  "malak-abaya",
+  "bdms",
+  "binrushd-care",
+  "roma-group",
+  "smokey-house",
+  "imagination"
+]);
+
 function cleanCampaignData(data){
-  return Array.isArray(data) ? data.filter(c => c && c.sample !== true) : [];
+  if (!Array.isArray(data)) return [];
+  return data
+    .filter(c => c && !DEMO_CAMPAIGN_IDS.has(c.id))
+    .map(c => ({
+      ...c,
+      influencers: Array.isArray(c.influencers) ? c.influencers : []
+    }));
 }
 
 function loadLocalData(){
@@ -685,13 +702,14 @@ function startCloudSync(){
       cloudReady = true;
       cloudUnsubscribe = CLOUD_DOC.onSnapshot(snapshot => {
         if (snapshot.exists && Array.isArray(snapshot.data().campaigns)) {
-          CAMPAIGNS = cleanCampaignData(snapshot.data().campaigns);
-          saveLocalData();
-          renderAll();
-          return CLOUD_DOC.set({
-            campaigns: CAMPAIGNS,
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
+          const cleaned = cleanCampaignData(snapshot.data().campaigns);
+          // Never wipe a valid local dataset because an old/partial cloud
+          // snapshot is empty or malformed.
+          if (cleaned.length > 0 || CAMPAIGNS.length === 0) {
+            CAMPAIGNS = cleaned;
+            saveLocalData();
+            renderAll();
+          }
         } else {
           // First browser seeds the cloud with its existing local data.
           return CLOUD_DOC.set({
