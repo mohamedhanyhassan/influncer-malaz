@@ -637,43 +637,6 @@ const DEFAULT_CAMPAIGNS = [
     { user:"zekra_mousa", type:"Visit", location:"Jazan", platforms:["tiktok","snapchat"], coverage:["Reel"], link:"#", views:12125, likes:205, comments:26 },
     { user:"manal.taha_", type:"Visit", location:"Jeddah", platforms:["instagram"], coverage:["Post","Stories"], link:"#", views:3589, likes:24, comments:8 },
     { user:"7s.s.1", type:"Visit", location:"Jazan", platforms:["tiktok"], coverage:["Reel"], link:"#", views:2850, likes:101, comments:79 }
-  ]},
-  { id:"kunoz", name:"Kunoz Campaign", sample:true, influencers:[
-    { user:"sara_alqahtani", type:"Unboxing", location:"Riyadh", platforms:["instagram"], coverage:["Reel","Stories"], link:"#", views:24100, likes:890, comments:54 },
-    { user:"mona.fragrance", type:"Unboxing", location:"Jeddah", platforms:["tiktok"], coverage:["Reel"], link:"#", views:31400, likes:1150, comments:88 },
-    { user:"lujain_k", type:"Review", location:"Dammam", platforms:["instagram","snapchat"], coverage:["Post","Stories"], link:"#", views:15760, likes:402, comments:21 }
-  ]},
-  { id:"escape-game", name:"Unknown Escape Game Campaign", sample:true, influencers:[
-    { user:"fahad.plays", type:"Visit", location:"Riyadh", platforms:["tiktok","instagram"], coverage:["Reel","Stories"], link:"#", views:42300, likes:2010, comments:176 },
-    { user:"nourah_games", type:"Visit", location:"Jeddah", platforms:["snapchat"], coverage:["Stories"], link:"#", views:9800, likes:310, comments:12 },
-    { user:"khalid_adventures", type:"Visit", location:"Khobar", platforms:["tiktok"], coverage:["Reel"], link:"#", views:27650, likes:1340, comments:95 }
-  ]},
-  { id:"malak-abaya", name:"Malak Abaya Campaign", sample:true, influencers:[
-    { user:"reem.style", type:"Review", location:"Riyadh", platforms:["instagram"], coverage:["Post","Reel"], link:"#", views:19200, likes:980, comments:63 },
-    { user:"abayas_by_huda", type:"Review", location:"Mecca", platforms:["instagram","tiktok"], coverage:["Reel","Stories"], link:"#", views:33900, likes:1760, comments:140 },
-    { user:"sultana_fashion", type:"Review", location:"Medina", platforms:["snapchat"], coverage:["Stories"], link:"#", views:8450, likes:220, comments:9 }
-  ]},
-  { id:"bdms", name:"BDMS Campaign", sample:true, influencers:[
-    { user:"dr.omar.k", type:"Visit", location:"Riyadh", platforms:["instagram"], coverage:["Post","Stories"], link:"#", views:12600, likes:410, comments:34 },
-    { user:"health.with.lama", type:"Visit", location:"Jeddah", platforms:["instagram","tiktok"], coverage:["Reel"], link:"#", views:18900, likes:705, comments:58 },
-    { user:"yousef.wellness", type:"Visit", location:"Dammam", platforms:["tiktok"], coverage:["Reel","Stories"], link:"#", views:22100, likes:940, comments:71 }
-  ]},
-  { id:"binrushd-care", name:"Bin-Rushd Care Campaign", sample:true, influencers:[
-    { user:"najla.eyecare", type:"Visit", location:"Riyadh", platforms:["instagram"], coverage:["Reel","Stories"], link:"#", views:16300, likes:590, comments:40 },
-    { user:"omar_sight", type:"Visit", location:"Jeddah", platforms:["tiktok","snapchat"], coverage:["Reel"], link:"#", views:20750, likes:880, comments:55 }
-  ]},
-  { id:"roma-group", name:"Roma Group Campaign", sample:true, influencers:[
-    { user:"hind.interiors", type:"Visit", location:"Riyadh", platforms:["instagram"], coverage:["Post","Stories"], link:"#", views:14900, likes:470, comments:30 },
-    { user:"bandar_homes", type:"Visit", location:"Khobar", platforms:["instagram","tiktok"], coverage:["Reel","Stories"], link:"#", views:26300, likes:1120, comments:84 }
-  ]},
-  { id:"smokey-house", name:"Smokey House Campaign", sample:true, influencers:[
-    { user:"foodie_faisal", type:"Visit", location:"Riyadh", platforms:["tiktok","instagram"], coverage:["Reel"], link:"#", views:45600, likes:3200, comments:210 },
-    { user:"bites_by_dana", type:"Visit", location:"Jeddah", platforms:["instagram"], coverage:["Reel","Stories"], link:"#", views:29800, likes:1560, comments:132 },
-    { user:"grill_master_sa", type:"Visit", location:"Dammam", platforms:["snapchat"], coverage:["Stories"], link:"#", views:11200, likes:340, comments:18 }
-  ]},
-  { id:"imagination", name:"Imagination Campaign", sample:true, influencers:[
-    { user:"creative_lujain", type:"Visit", location:"Riyadh", platforms:["instagram"], coverage:["Post","Reel"], link:"#", views:17450, likes:610, comments:42 },
-    { user:"art.by.sara", type:"Visit", location:"Jeddah", platforms:["tiktok"], coverage:["Reel"], link:"#", views:24900, likes:1050, comments:76 }
   ]}
 ];
 
@@ -681,8 +644,15 @@ const STORAGE_KEY = "coverage_campaigns_data_v1";
 const ADMIN_KEY = "coverage_campaigns_admin";
 const LANG_KEY = "coverage_campaigns_lang";
 
+function cleanCampaignData(data){
+  return Array.isArray(data) ? data.filter(c => c && c.sample !== true) : [];
+}
+
 function loadLocalData(){
-  try { const raw = localStorage.getItem(STORAGE_KEY); if (raw) return JSON.parse(raw); } catch(e){}
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return cleanCampaignData(JSON.parse(raw));
+  } catch(e){}
   return JSON.parse(JSON.stringify(DEFAULT_CAMPAIGNS));
 }
 
@@ -715,9 +685,13 @@ function startCloudSync(){
       cloudReady = true;
       cloudUnsubscribe = CLOUD_DOC.onSnapshot(snapshot => {
         if (snapshot.exists && Array.isArray(snapshot.data().campaigns)) {
-          CAMPAIGNS = snapshot.data().campaigns;
+          CAMPAIGNS = cleanCampaignData(snapshot.data().campaigns);
           saveLocalData();
           renderAll();
+          return CLOUD_DOC.set({
+            campaigns: CAMPAIGNS,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
         } else {
           // First browser seeds the cloud with its existing local data.
           return CLOUD_DOC.set({
