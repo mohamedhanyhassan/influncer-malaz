@@ -873,54 +873,152 @@ tbody tr:hover{background:#f1f8f3}
   .malaz-story{margin-bottom:18px}
 }
 </style>
+<style>
+/* STRUCTURE REDESIGN v3 — Malaz Campaign Hub */
+:root{--ink:#122218;--muted:#728178;--line:#dfe9e2;--soft:#f3f7f4;--green:#43c466;--deep:#1d6937;--orange:#ff5028;--white:#fff}
+*{box-sizing:border-box}
+body.dashboard-layout{margin:0;background:#f5f7f5;color:var(--ink);font-family:var(--font-ar);direction:rtl}
+.app-shell{display:flex;min-height:100vh;direction:ltr}
+.sidebar{width:245px;flex:none;min-height:100vh;background:#102117;color:#fff;padding:25px 16px;display:flex;flex-direction:column;direction:rtl;position:sticky;top:0;height:100vh}
+.side-brand{display:flex;align-items:center;gap:11px;padding:4px 8px 34px}
+.side-brand strong{font-size:18px;display:block;line-height:1.1}
+.side-brand small{display:block;color:#8ea398;font:10px var(--font-en-body);margin-top:4px;direction:ltr;text-align:right}
+.brand-mark{width:38px;height:38px;display:grid;place-items:center;background:var(--green);color:#102117;border-radius:11px;font:800 18px var(--font-en-head);box-shadow:0 0 0 5px rgba(67,196,102,.09)}
+.side-nav{display:flex;flex-direction:column;gap:5px}
+.nav-label{font:700 9px var(--font-en-body);color:#71857a;letter-spacing:.13em;padding:0 12px 9px;text-align:right}
+.nav-label.second{margin-top:28px}
+.nav-item{width:100%;border:0;background:transparent;color:#b8c8bf;padding:12px 12px;border-radius:10px;display:flex;align-items:center;gap:11px;font:600 12px var(--font-ar);cursor:pointer;text-align:right;transition:.18s}
+.nav-item:hover{background:#1a3123;color:#fff}
+.nav-item.active{background:#203c2a;color:#fff;box-shadow:inset -2px 0 0 var(--green)}
+.nav-icon{width:19px;text-align:center;color:#7f9c89;font-size:16px}.nav-item.active .nav-icon{color:var(--green)}
+.side-bottom{margin-top:auto;border-top:1px solid #26392d;padding:17px 8px 0;color:#789084;font-size:10px}
+.side-status{display:flex;align-items:center;gap:7px;margin-bottom:13px}.side-status i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(67,196,102,.1)}
+.side-bottom a{color:#9eb0a5;text-decoration:none;font:10px var(--font-en-body);direction:ltr;display:block;text-align:right}.side-bottom a:hover{color:var(--green)}
+.main-content{direction:rtl;flex:1;min-width:0;background:linear-gradient(180deg,#fbfcfb 0,#f5f7f5 42%,#f5f7f5 100%)}
+.content-inner{max-width:1260px;margin:auto;padding:38px 48px 28px}
+.mobile-header{display:none}
+.page-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;padding:6px 0 30px}
+.page-kicker{font:700 9px var(--font-en-body);letter-spacing:.13em;color:var(--green-deep);display:flex;align-items:center;gap:8px;margin-bottom:13px;direction:ltr;justify-content:flex-end}
+.page-kicker span{width:22px;height:2px;background:var(--green);border-radius:2px}
+.page-head h1{margin:0;font-size:38px;letter-spacing:-.035em;line-height:1.25;font-weight:800}
+.page-head p{margin:9px 0 0;color:var(--muted);font-size:12.5px;line-height:1.8;max-width:600px}
+.head-actions{display:flex;gap:8px}
+.ghost-action,.primary-action{height:39px;padding:0 14px;border-radius:10px;font:600 11px var(--font-ar);cursor:pointer;transition:.18s}
+.ghost-action{border:1px solid var(--line);background:#fff;color:#4d6155}.primary-action{border:1px solid var(--ink);background:var(--ink);color:#fff}.ghost-action:hover,.primary-action:hover{transform:translateY(-1px)}
+.overview-grid{display:grid;grid-template-columns:1.55fr 1fr 1fr;gap:12px;margin-bottom:28px}
+.metric-card{min-height:140px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:20px 21px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 6px 22px rgba(18,34,24,.035)}
+.metric-card.main-metric{background:#163322;color:#fff;border-color:#163322;position:relative;overflow:hidden}
+.metric-card.main-metric:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;left:-85px;bottom:-115px;border:1px solid rgba(151,237,170,.16);box-shadow:0 0 0 35px rgba(67,196,102,.025)}
+.metric-top{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:#aac0b1}.metric-top b{font:700 8px var(--font-en-body);letter-spacing:.12em;color:#74df91;background:rgba(67,196,102,.1);padding:4px 7px;border-radius:5px}
+.metric-card strong{font:800 30px var(--font-en-head);letter-spacing:-.03em;direction:ltr;text-align:right}.metric-card.main-metric strong{font-size:37px;color:#fff}.metric-card small{font-size:9.5px;color:#8b9a91}.metric-card:not(.main-metric) strong{color:var(--ink)}.metric-label{font-size:11px;color:#66776d}.metric-line{height:3px;background:#284635;border-radius:3px;overflow:hidden;margin-top:3px}.metric-line i{display:block;width:72%;height:100%;background:var(--green);border-radius:3px}
+.workspace{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 8px 28px rgba(18,34,24,.045)}
+.workspace-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:18px}.workspace-head h2{margin:0;font-size:19px}.workspace-head p{margin:4px 0 0;font-size:10.5px;color:var(--muted)}
+.workspace-tools{width:280px}.compact-search{margin:0!important}.compact-search input{height:39px!important;min-height:39px!important;padding:9px 37px 9px 12px!important;border-radius:10px!important;box-shadow:none!important;background:#f7f9f7!important;font-size:11px!important}.compact-search svg{right:13px!important;left:auto!important}
+.workspace>.toolbar{margin:0 0 12px!important}
+.workspace .notice{margin-bottom:12px!important}
+.workspace .campaign{box-shadow:none!important;border-radius:13px!important;margin-bottom:8px!important}
+.workspace .campaign:hover{box-shadow:0 5px 18px rgba(18,34,24,.06)!important}
+.workspace .campaign-head{min-height:69px;padding:11px 13px}
+.workspace .campaign-body{background:#fbfcfb}
+.workspace .campaign-brand-logo,.workspace .campaign-brand-fallback{width:42px;height:42px;border-radius:11px}
+.workspace .campaign-title{font-size:13px}.workspace .campaign-desc{font-size:10px}
+.workspace .badge{font-size:9px}.workspace .head-views{font-size:10px}
+.workspace .table-scroll{border-radius:0 0 12px 12px}
+.workspace table{min-width:860px;font-size:11px}.workspace thead th{font-size:9px;padding:10px 12px}.workspace tbody td{padding:10px 12px}
+.workspace .add-campaign-btn{margin-top:8px}
+.process-strip{display:grid;grid-template-columns:repeat(4,1fr);margin-top:18px;background:#edf4ef;border:1px solid #dce8df;border-radius:16px;overflow:hidden}
+.process-strip>div{padding:15px 18px;border-left:1px solid #dce8df;display:grid;grid-template-columns:auto 1fr;column-gap:9px;align-items:center}
+.process-strip>div:last-child{border-left:0}.process-strip span{grid-row:span 2;font:700 10px var(--font-en-head);color:var(--green-deep)}.process-strip strong{font-size:11px}.process-strip small{font-size:9px;color:var(--muted)}
+.new-footer{display:flex;justify-content:space-between;gap:15px;margin-top:18px;padding:17px 3px;color:#829087;font-size:9.5px}.new-footer a{color:var(--green-deep);font-weight:800;text-decoration:none}
+.modal-overlay{z-index:1000}
+@media(max-width:900px){.sidebar{width:205px}.content-inner{padding:30px 25px}.overview-grid{grid-template-columns:1fr 1fr}.main-metric{grid-column:span 2}.process-strip{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){
+ .app-shell{display:block}.sidebar{display:none}.main-content{min-height:100vh}.mobile-header{display:flex;height:62px;padding:0 16px;background:#102117;color:#fff;align-items:center;justify-content:space-between}.mobile-header .side-brand{padding:0}.mobile-header .brand-mark{width:32px;height:32px;font-size:15px}.mobile-header .side-brand strong{font-size:15px}.mobile-admin{border:1px solid #385342;background:#183323;color:#fff;border-radius:8px;padding:7px 10px;font:600 10px var(--font-ar)}
+ .content-inner{padding:22px 14px}.page-head{display:block;padding-bottom:21px}.page-head h1{font-size:29px}.page-head p{font-size:11px}.head-actions{display:none}.overview-grid{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}.main-metric{grid-column:span 2}.metric-card{min-height:108px;padding:14px;border-radius:14px}.metric-card.main-metric{min-height:116px}.metric-card strong{font-size:24px}.metric-card.main-metric strong{font-size:30px}.workspace{padding:13px;border-radius:16px}.workspace-head{display:block}.workspace-head h2{font-size:17px}.workspace-tools{width:100%;margin-top:12px}.process-strip{grid-template-columns:1fr 1fr}.process-strip>div{padding:12px 11px}.new-footer{display:block;line-height:2}.new-footer span{display:block}
+}
+</style>
 </style>
 </head>
-<body>
-
-<div class="hero">
-  <div class="hero-inner">
-    <div class="topbar">
-      <div class="brand"><span class="diamond"></span><span id="brandName">تغطيات الحملات مع وكالة <a href="https://malaz-sa.com" target="_blank" rel="noopener noreferrer" class="malaz-link">ملاذ</a></span></div>
-      <div class="topbar-actions">
-        <button class="lang-btn" id="langToggle" type="button">عربي</button>
-        <button class="admin-btn" id="adminToggle" type="button">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
-          <span id="adminLabel">Admin</span>
-        </button>
-      </div>
+<body class="dashboard-layout">
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="side-brand">
+      <span class="brand-mark">M</span>
+      <div><strong>ملاذ</strong><small>Campaign Hub</small></div>
     </div>
+    <nav class="side-nav">
+      <div class="nav-label">WORKSPACE</div>
+      <button class="nav-item active" type="button"><span class="nav-icon">⌂</span><span>نظرة عامة</span></button>
+      <button class="nav-item" type="button" onclick="document.getElementById('searchInput').focus()"><span class="nav-icon">⌕</span><span>الحملات</span></button>
+      <div class="nav-label second">MANAGE</div>
+      <button class="nav-item" id="sideAdmin" type="button"><span class="nav-icon">◈</span><span id="adminLabel">Admin</span></button>
+      <button class="nav-item" id="langToggle" type="button"><span class="nav-icon">ع</span><span>العربية</span></button>
+    </nav>
+    <div class="side-bottom">
+      <div class="side-status"><i></i><span>Live workspace</span></div>
+      <a href="https://malaz-sa.com" target="_blank" rel="noopener noreferrer">malaz-sa.com ↗</a>
+    </div>
+  </aside>
 
-    <div class="hero-grid"><div>
-      <div class="eyebrow"><span class="line"></span><span id="eyebrowText">سجل حملات وكالة <a href="https://malaz-sa.com" target="_blank" rel="noopener noreferrer" class="malaz-link">ملاذ</a></span></div>
-      <h1 class="hero-title" id="heroTitle"></h1>
-      <p class="hero-sub" id="heroSub"></p>
-      <div class="stat-row" id="statRow"></div>
-    </div><div class="hero-proof"><div class="big">5000+</div><div class="small">من المشاهير والمؤثرين داخل المملكة، مع اختيار الأسماء بما يتناسب مع طبيعة كل حملة وجمهورها.</div></div></div>
-  </div>
+  <main class="main-content">
+    <header class="mobile-header">
+      <div class="side-brand"><span class="brand-mark">M</span><strong>ملاذ</strong></div>
+      <button class="mobile-admin" id="mobileAdmin" type="button">Admin</button>
+    </header>
+
+    <div class="content-inner">
+      <div class="page-head">
+        <div>
+          <div class="page-kicker"><span></span> CAMPAIGN WORKSPACE</div>
+          <h1 id="heroTitle"></h1>
+          <p id="heroSub"></p>
+        </div>
+        <div class="head-actions">
+          <button class="ghost-action" id="mobileLang" type="button">عربي</button>
+          <button class="primary-action" id="desktopAdmin" type="button">Admin</button>
+        </div>
+      </div>
+
+      <section class="overview-grid">
+        <div class="metric-card main-metric">
+          <div class="metric-top"><span>إجمالي التغطيات</span><b>LIVE</b></div>
+          <strong id="metricViews">0</strong>
+          <small>مشاهدة موثقة عبر الحملات</small>
+          <div class="metric-line"><i></i></div>
+        </div>
+        <div class="metric-card"><span class="metric-label">الحملات</span><strong id="metricCampaigns">0</strong><small>Campaigns</small></div>
+        <div class="metric-card"><span class="metric-label">المؤثرين</span><strong id="metricInfluencers">0</strong><small>Influencers</small></div>
+      </section>
+
+      <section class="workspace">
+        <div class="workspace-head">
+          <div>
+            <h2>الحملات</h2>
+            <p>كل حملة وتفاصيل التغطيات الخاصة بها في مكان واحد.</p>
+          </div>
+          <div class="workspace-tools">
+            <div class="search compact-search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input id="searchInput" type="text" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+        <div id="noticeSlot"></div>
+        <div id="list"></div>
+        <button class="add-campaign-btn" id="addCampaignBtn" type="button" style="display:none"><span>＋</span><span id="addCampaignLabel"></span></button>
+      </section>
+
+      <section class="process-strip">
+        <div><span>01</span><strong>اختيار</strong><small>أسماء مناسبة للحملة</small></div>
+        <div><span>02</span><strong>اعتماد</strong><small>مراجعة واختيار المؤثرين</small></div>
+        <div><span>03</span><strong>تغطية</strong><small>نشر ومتابعة الروابط</small></div>
+        <div><span>04</span><strong>قياس</strong><small>مشاهدات ونتائج</small></div>
+      </section>
+
+      <footer class="new-footer"><span>تغطيات الحملات مع وكالة <a href="https://malaz-sa.com" target="_blank" rel="noopener noreferrer">ملاذ</a></span><span>Campaign Coverage Hub · 2026</span></footer>
+    </div>
+  </main>
 </div>
-
-<div class="wrap">
-  <section class="malaz-story"><div><div class="eyebrow" style="margin-bottom:10px"><span class="line"></span><span>WHY MALAZ</span></div><h2>اختيار المشاهير عند ملاذ مو عشوائي.</h2><p>في ملاذ، نشتغل على حملات المشاهير كجزء من استراتيجية متكاملة. ما ينزل أي مشهور في الحملة إلا بعد اختياره واعتماده بما يتناسب مع النشاط، الجمهور، المنصة وطبيعة الحملة، مع متابعة التغطيات والنتائج في مكان واحد.</p></div><div class="malaz-points"><div class="malaz-point"><span>01 — SELECTION</span>اختيار المشاهير المناسبين للحملة</div><div class="malaz-point"><span>02 — CONTROL</span>ما يتم اعتماد أي اسم قبل اختياره</div><div class="malaz-point"><span>03 — TRACKING</span>متابعة التغطيات والروابط والمشاهدات</div></div></section><div class="toolbar"><div id="noticeSlot" style="flex:1"></div></div>
-
-  <div class="search">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input id="searchInput" type="text" autocomplete="off" />
-  </div>
-
-  <div id="list"></div>
-  <button class="add-campaign-btn" id="addCampaignBtn" type="button" style="display:none">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    <span id="addCampaignLabel"></span>
-  </button>
-</div>
-
-<div class="closing">
-  <div class="closing-inner">
-    <div class="brand"><span class="diamond"></span><span id="closingBrand">Coverage Of Campaigns</span></div>
-    <p id="closingText"></p>
-  </div>
-</div>
-
 <div id="modalRoot"></div>
 
 <script src="https://www.gstatic.com/firebasejs/12.19.0/firebase-app-compat.js"></script>
